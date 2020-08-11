@@ -34,7 +34,7 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
             int maximumY) throws IllegalArgumentException {
     	
     	if (maximumX <= minimumX || maximumY <= minimumY) {
-    		throw new IllegalArgumentException("");
+    		throw new IllegalArgumentException("Max X(Y) is less than Min X(Y)");
     	}
         // TODO: implement the constructor
     	
@@ -42,16 +42,20 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
     	this.maximumX = maximumX;
     	this.minimumY = minimumY;
     	this.maximumY = maximumY;
-//    	this.w = w;
-//    	this.h = h;
+    	
     	w = maximumX - minimumX;
     	h = maximumY - minimumY;
+
     	data = new Object[w][h];
-    	clear();
     }
     
     @Override
     public void add(int x, int y, T element) throws IllegalArgumentException {
+    	
+    	if (x < w || y < h) {
+    		throw new IllegalArgumentException();
+    	}
+    	
     	data[x][y] = element;
     }
     
@@ -64,7 +68,7 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
     
     @Override
     public boolean remove(int x, int y) throws IndexOutOfBoundsException {
-    	if (data[x][y] == null)
+    	if (data[x][y] == null  || x < 0 || y < 0)
     		return false;
     	
     	data[x][y] = null;
@@ -79,6 +83,13 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
     		}
     	}
     }
+
+	@Override
+	public void resize(int newMinimumX, int newMaximumX, int newMinimumY, int newMaximumY)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		
+	}
     
     
     
