@@ -7,8 +7,8 @@
 public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
 
 	private Object[][] data;
-	private int w;
-	private int h;
+	private int width;
+	private int height;
 	private int minimumY;
 	private int maximumY;
 	private int minimumX;
@@ -30,7 +30,8 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
      * @throws IllegalArgumentException if the x minimum is greater
      *         than the x maximum (and resp. with y min/max)
      */
-    public ArrayCartesianPlane(int minimumX, int maximumX, int minimumY,
+    @SuppressWarnings("unchecked")
+	public ArrayCartesianPlane(int minimumX, int maximumX, int minimumY,
             int maximumY) throws IllegalArgumentException {
     	
     	if (maximumX <= minimumX || maximumY <= minimumY) {
@@ -43,16 +44,35 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
     	this.minimumY = minimumY;
     	this.maximumY = maximumY;
     	
-    	w = maximumX - minimumX;
-    	h = maximumY - minimumY;
-
-    	data = new Object[w][h];
+    	
+//    	width = 
+//    	height = maximumY - minimumY;
+    	
+    	this.width = (maximumX - minimumX) + 1;
+    	this.height = (maximumY - minimumY) + 1;
+    	
+    	
+    	data = new Object[width][height];
+    	System.out.println("data " + data[1][1]);
+    	
+//		clear();		
+    	
+//    	if (maximumX <= minimumX || maximumY <= minimumY) {
+//    		throw new IllegalArgumentException();
+//    	}
+//    	
+//    	this.minimumX = minimumX;
+//    	this.maximumX = maximumX;
+//    	this.minimumY = minimumY;
+//    	this.maximumY = maximumY;
+//    	
+//    	data = new Object[minimumX][maximumX][minimumY][maximumY];
     }
     
     @Override
     public void add(int x, int y, T element) throws IllegalArgumentException {
     	
-    	if (x < w || y < h) {
+    	if (x < 0 || y < 0 || x >= width || y >= height) {
     		throw new IllegalArgumentException();
     	}
     	
@@ -68,7 +88,7 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
     
     @Override
     public boolean remove(int x, int y) throws IndexOutOfBoundsException {
-    	if (data[x][y] == null  || x < 0 || y < 0)
+    	if (data[x][y] == null)
     		return false;
     	
     	data[x][y] = null;
@@ -77,34 +97,47 @@ public class ArrayCartesianPlane<T> implements CartesianPlane<T> {
     
     @Override
     public void clear() {
-    	for (int x = 0; x < w; x++) {
-    		for (int y = 0; y < h; y++) {
+    	for (int x = 0; x < width; x++) {
+    		for (int y = 0; y < height; y++) {
     			data[x][y] = null;
     		}
     	}
     }
 
+		// TODO Auto-generated method stub
+
+    
+    
+    
 	@Override
 	public void resize(int newMinimumX, int newMaximumX, int newMinimumY, int newMaximumY)
 			throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		
+		
+//		this.width = (maximumX - minimumX) + 1;
+		if (newMaximumX <= newMinimumX || newMaximumY <= newMinimumY) {
+    		throw new IllegalArgumentException("Max X(Y) is less than Min X(Y)");
+    	} 
+		
+		int newWidth = (newMaximumX - newMinimumX) + 1;
+		int newHeight = (newMaximumY - newMinimumY) + 1;
+//		Object[][][][] newData = new Object[newMinimumX][newMaximumX][newMinimumY][newMaximumY];
+		Object[][] newData = new Object[newWidth][newHeight];
+
+		
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				if (data[x][y] != null) {
+					if (x >= newWidth || y >= newHeight)
+						throw new IllegalArgumentException("Elements Lost");
+					
+					newData[x][y] = data[x][y];
+				}
+			}
+		}
+		// TODO Auto-generated method stub
+		data = newData;
 	}
-    
-    
-    
-//	@Override
-//	public void resize(int newMinimumX, int newMaximumX, int newMinimumY, int newMaximumY)
-//			throws IllegalArgumentException {
-//		
-//		Object[][] newData = new Object[newW][newH];
-//		
-//		for (int x = 0; x < width; x++) {
-//			
-//		}
-//		// TODO Auto-generated method stub
-//		
-//	}
 
     // TODO: you are to implement all of ArrayCartesianPlanes's methods here
 }
